@@ -1,0 +1,155 @@
+---
+  - hosts: local
+    user: 
+    tasks:
+      - name: Install common software requirements
+        become: true
+        yum:
+          state: present
+          name:
+            - yum-utils
+            - yum-plugin-fastestmirror
+            - epel-release
+            - rpcbind
+            - python
+            - nfs-utils
+            - rpcbind
+            - device-mapper-persistent-data
+            - lvm2
+            - python-pip
+            - ca-certificates
+            - curl
+
+      - name: Add Docker repo
+        get_url:
+          url: https://download.docker.com/linux/centos/docker-ce.repo
+          dest: /etc/yum.repos.d/docer-ce.repo
+        become: yes
+
+      - name: Enable Docker Edge repo
+        ini_file:
+          dest: /etc/yum.repos.d/docer-ce.repo
+          section: 'docker-ce-edge'
+          option: enabled
+          value: 0
+        become: yes
+
+      - name: Enable Docker Test repo
+        ini_file:
+          dest: /etc/yum.repos.d/docer-ce.repo
+          section: 'docker-ce-test'
+          option: enabled
+          value: 0
+        become: yes
+
+      - name: Install Docker
+        package:
+          name: docker-ce
+          state: latest
+        become: yes
+
+      - name: Start Docker service
+        service:
+          name: docker
+          state: started
+          enabled: yes
+        become: yes
+
+      - name: Installing docker compose
+        package:
+          name: docker-compose
+          state: latest
+        become: yes
+
+      - name: Criando volume lvg
+        lvg:
+              vg: vg_volumes
+              pvs: /dev/sdb
+
+      - name: Criando volume lvol
+        lvol:
+              vg: vg_volumes
+              lv: lv_volumes
+              size: 199G
+
+      - name: Create file system
+        filesystem:
+              fstype: ext4
+              dev: /dev/vg_volumes/lv_volumes
+     
+      - name: mount logical volume
+        mount:
+              name: /datadisk
+              src: /dev/vg_volumes/lv_volumes
+              fstype: ext4
+              state: mounted
+
+      - name: create diretory /datadisk/otrs
+        file:
+          path: /datadisk/otrs
+          state: directory 
+        become: true
+      
+      - name: create diretory /datadisk/otrs/otrs_addons
+        file:
+          path: /datadisk/otrs/otrs_addons
+          state: directory 
+        become: true
+
+      - name: create diretory /datadisk/mysql/db-data/
+        file:
+          path: /datadisk/mysql/db-data/
+          state: directory 
+        become: true
+
+      - name: create diretory /datadisk/portainer
+        file:
+          path: /datadisk/portainer
+          state: directory 
+        become: true
+
+      - name: create diretory /datadisk/gitlab/data
+        file:
+          path: /datadisk/gitlab/data
+          state: directory 
+        become: true
+      
+      - name: create diretory /datadisk/gitlab/logs
+        file:
+          path: /datadisk/gitlab/logs
+          state: directory 
+        become: true
+
+      - name: create diretory /datadisk/gitlab/config
+        file:
+          path: /datadisk/gitlab/config
+          state: directory 
+        become: true
+        
+
+      - name: create diretory /datadisk/gitlab-runner/config
+        file:
+          path: /datadisk/gitlab-runner/config
+          state: directory 
+        become: true
+
+      - name: create diretory /datadisk/registry
+        file:
+          path: /datadisk/registry
+          state: directory 
+        become: true
+
+
+      - firewalld:
+          service: https
+          permanent: yes
+          state: enabled
+
+      - firewalld:
+          service: http
+          permanent: yes
+          state: enabled
+
+      - name: Reload firewall
+        command: firewall-cmd --reload  
+     
