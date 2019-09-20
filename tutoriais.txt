@@ -1,0 +1,24 @@
+
+OTRS
+
+bash < (curl https://raw.githubusercontent.com/complemento/docker.otrs/master/run_otrs_6.sh)
+
+https://complemento.net.br/2018/12/06/instalando-um-super-otrs-6-com-docker-no-centos-7-utilizando-apenas-um-comando/
+
+https://www.esentri.com/create-and-use-a-docker-container-with-oracle-xe-on-macos/
+
+
+GITLAB
+
+https://www.concrete.com.br/2018/02/15/conheca-o-gitlab-ci/
+
+
+PORTAINER
+
+https://medium.com/@renato.groffe/docker-portainer-gerenciando-containers-a-partir-de-um-browser-87af6ce74be3
+
+REGISTRY
+
+https://www.youtube.com/watch?v=8gEs_zefNYA
+http://www.selftuts.com/how-to-host-you-own-docker-registry/
+
