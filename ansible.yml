@@ -139,6 +139,24 @@
           state: directory 
         become: true
 
+      - name: create diretory /datadisk/nexus
+        file:
+          path: /datadisk/nexus
+          state: directory 
+        become: true
+
+      - name: create diretory /datadisk/nexus
+        file:
+          path: /datadisk/nexus/tmp
+          state: directory 
+        become: true
+
+      - name: create diretory /datadisk/nexus
+        file:
+          path: /datadisk/nexus/logs
+          state: directory 
+        become: true
+
 
       - firewalld:
           service: https

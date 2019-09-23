@@ -56,6 +56,14 @@ services:
     environment:
       ENV_DOCKER_REGISTRY_HOST: docker-registry
       ENV_DOCKER_REGISTRY_PORT: 5000
+
+  nexus:
+    image: sonatype/nexus3
+    volumes:
+      - /datadisk/nexus:/nexus-data
+    ports:
+      - "7080:8081"
+  
   
 
 
